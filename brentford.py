@@ -141,7 +141,7 @@ def train(model,lr,lam,train_set,val_set,users,items):
     
     ts = time.time() 
     loss_tot = []
-    for _ in range(5):
+    for e in range(3):
         for idx, (u,i,r) in enumerate(train_set):
             optimizer.zero_grad()
             
@@ -150,11 +150,11 @@ def train(model,lr,lam,train_set,val_set,users,items):
             # gamma_u = model.gamma_user[users[u],:]
             # gamma_i = model.gamma_item[items[i],:]
             
-            y = torch.tensor([float(r)])
+            y = torch.tensor([float(r)]).to(device)
             # pred = model.forward(beta_u,beta_i,gamma_u,gamma_i) 
             # loss = (pred-y)**2+lam*(beta_u+\
             #         beta_i+ torch.norm(gamma_u)+torch.norm(gamma_i))
-            pred = model.forward(beta_u,beta_i) 
+            pred = model.forward(beta_u,beta_i).to(device)
             loss = (pred-y)**2+lam*(beta_u**2+beta_i**2)
             loss.backward()
             
@@ -163,7 +163,7 @@ def train(model,lr,lam,train_set,val_set,users,items):
             #scheduler.step()
             loss_tot.append(loss)
             if idx % 100 == 0:
-                    print("iter {}, loss: {}".format(idx, loss.item()))
+                    print("epoch {}, iter {}, loss: {}".format(e, idx, loss.item()))
                     #print(model.beta_user[users[u]],model.beta_item[items[i]],model.gamma_user[users[u],:],model.gamma_item[items[i],:])
                     losses.append(torch.mean(torch.tensor(loss_tot)).item())
                     loss_tot = []
