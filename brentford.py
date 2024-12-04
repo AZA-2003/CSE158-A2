@@ -383,7 +383,7 @@ def Precision(predictions,labels,users,items,k=3):
                 relevance+=1
         totalPreKU += relevance/k
 
-    return totalPreKU/len(users)
+    return totalPreKU/len(userRanks)
 
 def Recall(predictions,labels,users,items,k=3):
     userRanks = defaultdict(list)
@@ -410,7 +410,7 @@ def Recall(predictions,labels,users,items,k=3):
                 relevance+=1
         totalRKU += relevance/len(preds)
 
-    return totalRKU/len(users)
+    return totalRKU/len(userRanks)
                     
 
 # In[389]:
