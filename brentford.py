@@ -141,7 +141,7 @@ def train(model,lr,lam,train_set,val_set,users,items):
     
     ts = time.time() 
     loss_tot = []
-    for e in range(3):
+    for e in range(2):
         for idx, (u,i,r) in enumerate(train_set):
             optimizer.zero_grad()
             
@@ -377,7 +377,7 @@ def Precision(predictions,labels,users,items,k=3):
     totalPreKU = 0
     for u, preds in userRanks.items():
         relevance= 0
-        ps = [p[1] for p in labelRanks[u]]
+        ps = [p[1] for p in labelRanks[u][:k]]
         for i, (r,b) in enumerate(preds):
             if b in items and b in ps:
                 relevance+=1
@@ -404,7 +404,7 @@ def Recall(predictions,labels,users,items,k=3):
     totalRKU = 0
     for u, preds in userRanks.items():
         relevance = 0
-        ps = [p[1] for p in labelRanks[u]]
+        ps = [p[1] for p in labelRanks[u][:k]]
         for i, (r,b) in enumerate(preds):
             if b in items and b in ps:
                 relevance+=1
